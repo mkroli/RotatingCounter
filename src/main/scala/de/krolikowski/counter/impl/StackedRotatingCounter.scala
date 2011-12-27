@@ -13,4 +13,6 @@ class StackedRotatingCounter(pastRotatingCounter: RotatingCounter, currentRotati
     pastRotatingCounter.reset
     currentRotatingCounter.reset
   }
+
+  override def partitions = pastRotatingCounter.partitions ++ currentRotatingCounter.partitions
 }

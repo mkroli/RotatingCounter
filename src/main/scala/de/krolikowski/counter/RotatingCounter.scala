@@ -16,6 +16,8 @@ trait RotatingCounter {
   def +=(count: Long) = add(count)
 
   def apply() = sum
+
+  def partitions: Seq[Long]
 }
 
 object RotatingCounter {

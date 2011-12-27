@@ -3,7 +3,7 @@ package de.krolikowski.counter.impl
 import de.krolikowski.counter.RotatingCounter
 
 class SimpleRotatingCounter(period: Long, size: Int) extends RotatingCounter {
-  private val partitions = new Array[Long](size)
+  private val _partitions = new Array[Long](size)
   private var lastAccessTime: Long = _
   private var lastAccessIndex: Int = _
 
@@ -12,8 +12,8 @@ class SimpleRotatingCounter(period: Long, size: Int) extends RotatingCounter {
 
   @scala.annotation.tailrec
   private def resetRotating(start: Int, end: Int, expired: Long = 0L): Long = {
-    val count = expired + partitions(start)
-    partitions(start) = 0L
+    val count = expired + _partitions(start)
+    _partitions(start) = 0L
     if (start == end)
       count
     else
@@ -22,7 +22,7 @@ class SimpleRotatingCounter(period: Long, size: Int) extends RotatingCounter {
 
   private def expire(now: Long, index: Int) {
     var count: Long = 0L
-    partitions synchronized {
+    _partitions synchronized {
       if (lastAccessTime + period < now) {
         count = resetRotating(0, size - 1)
       } else if (lastAccessIndex != index) {
@@ -36,21 +36,23 @@ class SimpleRotatingCounter(period: Long, size: Int) extends RotatingCounter {
   override def add(count: Long) {
     val now = System.currentTimeMillis
     val index = currentPartition(now)
-    partitions synchronized {
+    _partitions synchronized {
       expire(now, index)
       lastAccessTime = now
       lastAccessIndex = index
-      partitions(index) += count
+      _partitions(index) += count
     }
   }
 
   override def sum: Long = {
     val now = System.currentTimeMillis
-    partitions synchronized {
+    _partitions synchronized {
       expire(now, currentPartition(now))
-      partitions reduce { _ + _ }
+      _partitions reduce { _ + _ }
     }
   }
 
   override def reset: Unit = resetRotating(0, size - 1)
+
+  override def partitions = _partitions.clone()
 }
