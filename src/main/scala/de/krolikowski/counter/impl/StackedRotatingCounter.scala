@@ -7,12 +7,18 @@ class StackedRotatingCounter(pastRotatingCounter: RotatingCounter, currentRotati
 
   override def add(count: Long) = currentRotatingCounter add count
 
-  override def sum = pastRotatingCounter.sum + currentRotatingCounter.sum
-
-  override def reset {
-    pastRotatingCounter.reset
-    currentRotatingCounter.reset
+  override def sum = this synchronized {
+    pastRotatingCounter.sum + currentRotatingCounter.sum
   }
 
-  override def partitions = pastRotatingCounter.partitions ++ currentRotatingCounter.partitions
+  override def reset {
+    this synchronized {
+      pastRotatingCounter.reset
+      currentRotatingCounter.reset
+    }
+  }
+
+  override def partitions = this synchronized {
+    pastRotatingCounter.partitions ++ currentRotatingCounter.partitions
+  }
 }

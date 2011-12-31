@@ -1,13 +1,13 @@
 package de.krolikowski.counter
 
-import de.krolikowski.counter.impl.{SimpleRotatingCounter, StackedRotatingCounter}
+import de.krolikowski.counter.impl.{ SimpleRotatingCounter, StackedRotatingCounter }
 
 trait RotatingCounter {
   var onExpiry: (Long) => Unit = (count: Long) => {}
 
   def add(count: Long): Unit
 
-  def addOne = add(1L)
+  def add: Unit = add(1)
 
   def sum: Long
 

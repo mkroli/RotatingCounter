@@ -9,7 +9,7 @@ class RotatingCounterSpec extends Spec {
   describe("A RotatingCounter") {
     it("should calculate the sum of events over a period of time") {
       val counter = RotatingCounter((1000, 10))
-      for(i <- 1 to 10) {
+      for (i <- 1 to 10) {
         counter += 1
         Thread.sleep(10)
       }
