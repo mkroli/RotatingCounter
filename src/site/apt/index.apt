@@ -1,0 +1,47 @@
+ ---
+ RotatingCounter
+ ---
+ Michael Krolikowski
+ ---
+
+RotatingCounter
+
+* Overview
+
+  With RotatingCounter one can count events at the moment they occur.
+  RotatingCounter can then calculate the sum of events over a given period.
+  It will automatically expire too old events.
+
+* Implementation notes
+
+  The events are stored in an array which is used as ring-buffer.
+  You can define the size of the array and therefore the accuracy of the counter.
+  You can also specify different array sizes for disjunct sub-periods.
+
+* Usage
+
+  Creating a RotatingCounter with two arrays - each containing 1000 elements -
+  one for 59 and one for the last 1 minute looks like the following:
+
++--
+val counter = RotatingCounter(
+  (59 * 60 * 1000, 1000),
+  (60 * 1000, 1000))
++--
+
+  Adding events can be done like the following:
+
++--
+counter.add    // adds 1 event
+counter.add(1) // adds 1 event
+counter += 1   // adds 1 event
+counter += 5   // adds 5 events
++--
+
+  The data can be read like this:
+
++--
+counter()          // calculates the sum of events occurred during the last period
+counter.sum        // as above
+counter.partitions // returns the partitions containing the events
++--
