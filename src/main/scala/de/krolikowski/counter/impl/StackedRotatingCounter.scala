@@ -4,6 +4,7 @@ import de.krolikowski.counter.RotatingCounter
 
 class StackedRotatingCounter(pastRotatingCounter: RotatingCounter, currentRotatingCounter: RotatingCounter) extends RotatingCounter {
   currentRotatingCounter.onExpiry = (count: Long) => pastRotatingCounter add count
+  pastRotatingCounter.onExpiry = (count: Long) => this.onExpiry(count)
 
   override def add(count: Long) = currentRotatingCounter add count
 
