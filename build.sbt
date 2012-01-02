@@ -1,3 +1,5 @@
+organization := "de.krolikowski.counter"
+
 name := "counter"
 
 version := "0.1-SNAPSHOT"
