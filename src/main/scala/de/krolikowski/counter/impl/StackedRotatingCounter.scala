@@ -20,6 +20,8 @@ class StackedRotatingCounter(pastRotatingCounter: RotatingCounter, currentRotati
   }
 
   override def partitions = this synchronized {
-    pastRotatingCounter.partitions ++ currentRotatingCounter.partitions
+    val currentPartitions = currentRotatingCounter.partitions
+    val pastPartitions = pastRotatingCounter.partitions
+    pastPartitions ++ currentPartitions
   }
 }

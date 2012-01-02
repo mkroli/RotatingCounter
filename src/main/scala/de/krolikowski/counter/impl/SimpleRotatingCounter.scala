@@ -58,7 +58,7 @@ class SimpleRotatingCounter(period: Long, size: Int) extends RotatingCounter {
     val now = System.currentTimeMillis
     val index = currentPartition(now)
     counterPartitions synchronized {
-      expire(now, currentPartition(now))
+      expire(now, index)
       (counterPartitions drop index + 1) ++ (counterPartitions take index + 1)
     }
   }
