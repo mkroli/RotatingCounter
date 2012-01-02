@@ -51,7 +51,6 @@
 				<reportSets>
 					<reportSet>
 						<reports>
-							<report>index</report>
 							<report>dependencies</report>
 							<report>license</report>
 							<report>scm</report>
