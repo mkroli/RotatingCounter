@@ -4,7 +4,29 @@
 	<groupId>de.krolikowski.counter</groupId>
 	<artifactId>counter</artifactId>
 	<version>0.1-SNAPSHOT</version>
+
+	<name>RotatingCounter</name>
 	<url>https://github.com/mkroli/RotatingCounter</url>
+	<description>
+		With RotatingCounter one can count events at the moment they occur.
+		RotatingCounter can then calculate the sum of events over a given period.
+		It will automatically expire too old events.
+	</description>
+	<licenses>
+		<license>
+			<name>Apache License Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+	<organization>
+		<name>Michael Krolikowski</name>
+		<url>https://github.com/mkroli</url>
+	</organization>
+	<scm>
+		<connection>scm:git:git://github.com/mkroli/RotatingCounter.git</connection>
+		<developerConnection>scm:git:https://github.com/mkroli/RotatingCounter.git</developerConnection>
+		<url>https://github.com/mkroli/RotatingCounter</url>
+	</scm>
 
 	<properties>
 		<maven.compiler.source>1.5</maven.compiler.source>
@@ -14,6 +36,32 @@
 		<scalatest.version>1.6.1</scalatest.version>
 		<junit.version>4.10</junit.version>
 	</properties>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.scala-tools</groupId>
+				<artifactId>maven-scala-plugin</artifactId>
+				<version>2.15.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.4</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>index</report>
+							<report>dependencies</report>
+							<report>license</report>
+							<report>scm</report>
+							<report>summary</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
 
 	<dependencies>
 		<dependency>
@@ -45,17 +93,9 @@
 				<version>2.15.1</version>
 				<executions>
 					<execution>
-						<id>compile</id>
 						<goals>
 							<goal>compile</goal>
 							<goal>testCompile</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>doc</id>
-						<phase>site</phase>
-						<goals>
-							<goal>doc</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -69,6 +109,33 @@
 						<include>**/*Spec.class</include>
 					</includes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>site</goal>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.1.2</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

@@ -4,8 +4,8 @@
 	xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
 	<body>
 		<menu name="Overview">
-			<item name="Introduction" href="index.html" />
-			<item name="ScalaDoc" href="scaladocs/index.html" />
+			<item name="About" href="index.html" />
 		</menu>
+		<menu ref="reports" />
 	</body>
 </project>
