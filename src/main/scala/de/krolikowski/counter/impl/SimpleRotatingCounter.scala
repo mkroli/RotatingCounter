@@ -54,5 +54,12 @@ class SimpleRotatingCounter(period: Long, size: Int) extends RotatingCounter {
 
   override def reset: Unit = counterPartitions synchronized resetRotating(0, size - 1)
 
-  override def partitions = counterPartitions synchronized counterPartitions.clone()
+  override def partitions = {
+    val now = System.currentTimeMillis
+    val index = currentPartition(now)
+    counterPartitions synchronized {
+      expire(now, currentPartition(now))
+      (counterPartitions drop index + 1) ++ (counterPartitions take index + 1)
+    }
+  }
 }

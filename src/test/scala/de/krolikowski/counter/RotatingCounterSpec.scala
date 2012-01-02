@@ -36,5 +36,22 @@ class RotatingCounterSpec extends Spec {
       Thread.sleep(20)
       assert(counter() == 0)
     }
+
+    it("should return the partitions starting from the oldest partition") {
+      val counter = RotatingCounter((100, 5))
+      counter.add
+
+      assert(counter.partitions == List(0, 0, 0, 0, 1))
+      Thread.sleep(20)
+      assert(counter.partitions == List(0, 0, 0, 1, 0))
+      Thread.sleep(20)
+      assert(counter.partitions == List(0, 0, 1, 0, 0))
+      Thread.sleep(20)
+      assert(counter.partitions == List(0, 1, 0, 0, 0))
+      Thread.sleep(20)
+      assert(counter.partitions == List(1, 0, 0, 0, 0))
+      Thread.sleep(20)
+      assert(counter.partitions == List(0, 0, 0, 0, 0))
+    }
   }
 }
