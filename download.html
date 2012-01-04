@@ -45,11 +45,11 @@
                                 <h5>Overview</h5>
                   <ul>
                   <li class="none">
-            <strong>Introduction</strong>
-          </li>
-                  <li class="none">
-                          <a href="download.html" title="Download">Download</a>
+                          <a href="index.html" title="Introduction">Introduction</a>
             </li>
+                  <li class="none">
+            <strong>Download</strong>
+          </li>
           </ul>
                        <h5>Project Documentation</h5>
                   <ul>
@@ -69,14 +69,7 @@
     </div>
     <div id="bodyColumn">
       <div id="contentBox">
-        <div class="section"><h2>About RotatingCounter<a name="About_RotatingCounter"></a></h2><div class="section"><h3>Overview<a name="Overview"></a></h3><p>With RotatingCounter one can count events at the moment they occur. RotatingCounter can then calculate the sum of events over a given period. It will automatically expire too old events.</p></div><div class="section"><h3>Implementation notes<a name="Implementation_notes"></a></h3><p>The events are stored in an array which is used as ring-buffer. You can define the size of the array and therefore the accuracy of the counter. You can also specify different array sizes for disjunct sub-periods.</p></div><div class="section"><h3>Usage<a name="Usage"></a></h3><p>Creating a RotatingCounter with two arrays - each containing 1000 elements - one for 59 and one for the last 1 minute looks like the following:</p><div class="source"><pre>val counter = RotatingCounter(
-  (59 * 60 * 1000, 1000),
-  (60 * 1000, 1000))</pre></div><p>Adding events can be done like the following:</p><div class="source"><pre>counter.add    // adds 1 event
-counter.add(1) // adds 1 event
-counter += 1   // adds 1 event
-counter += 5   // adds 5 events</pre></div><p>The data can be read like this:</p><div class="source"><pre>counter()          // calculates the sum of events occurred during the last period
-counter.sum        // as above
-counter.partitions // returns the partitions containing the events</pre></div></div></div>
+        <div class="section"><h2>Download<a name="Download"></a></h2><table border="1" class="bodyTable"><tr class="a"><td align="left"><b>Type</b></td><td align="left"><b>Link</b></td></tr><tr class="b"><td align="left">Binaries</td><td align="left"><a class="externalLink" href="https://github.com/downloads/mkroli/RotatingCounter/counter-0.2.jar">counter-0.2.jar</a></td></tr><tr class="a"><td align="left">Sources</td><td align="left"><a class="externalLink" href="https://github.com/downloads/mkroli/RotatingCounter/counter-0.2-sources.jar">counter-0.2-sources.jar</a></td></tr><tr class="b"><td align="left">Site</td><td align="left"><a class="externalLink" href="https://github.com/downloads/mkroli/RotatingCounter/counter-0.2-site.jar">counter-0.2-site.jar</a></td></tr></table></div>
       </div>
     </div>
     <div class="clear">
