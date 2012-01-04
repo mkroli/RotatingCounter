@@ -23,8 +23,9 @@ class SimpleRotatingCounter(period: Long, size: Int) extends RotatingCounter {
   private var lastAccessTime: Long = _
   private var lastAccessIndex: Int = _
 
-  private def currentPartition(now: Long) =
-    (((now % period) * size) / period).asInstanceOf[Int]
+  private def partitionOfTime(time: Long) = (time * size) / period
+
+  private def rotatedPartitionOfTime(now: Long) = partitionOfTime(now % period).asInstanceOf[Int]
 
   @scala.annotation.tailrec
   private def resetRotating(start: Int, end: Int, expired: Long = 0L): Long = {
@@ -39,7 +40,7 @@ class SimpleRotatingCounter(period: Long, size: Int) extends RotatingCounter {
   private def expire(now: Long, index: Int) {
     var count: Long = 0L
     counterPartitions synchronized {
-      if (lastAccessTime + period < now) {
+      if (partitionOfTime(lastAccessTime + period) <= partitionOfTime(now)) {
         count = resetRotating(0, size - 1)
       } else if (lastAccessIndex != index) {
         count = resetRotating((lastAccessIndex + 1) % size, index)
@@ -51,7 +52,7 @@ class SimpleRotatingCounter(period: Long, size: Int) extends RotatingCounter {
 
   override def add(count: Long) {
     val now = System.currentTimeMillis
-    val index = currentPartition(now)
+    val index = rotatedPartitionOfTime(now)
     counterPartitions synchronized {
       expire(now, index)
       lastAccessTime = now
@@ -63,7 +64,7 @@ class SimpleRotatingCounter(period: Long, size: Int) extends RotatingCounter {
   override def sum: Long = {
     val now = System.currentTimeMillis
     counterPartitions synchronized {
-      expire(now, currentPartition(now))
+      expire(now, rotatedPartitionOfTime(now))
       counterPartitions reduce { _ + _ }
     }
   }
@@ -72,10 +73,10 @@ class SimpleRotatingCounter(period: Long, size: Int) extends RotatingCounter {
 
   override def partitions = {
     val now = System.currentTimeMillis
-    val index = currentPartition(now)
+    val index = rotatedPartitionOfTime(now)
     counterPartitions synchronized {
       expire(now, index)
-      (counterPartitions drop index + 1) ++ (counterPartitions take index + 1)
+      (counterPartitions drop (index + 1)) ++ (counterPartitions take (index + 1))
     }
   }
 }
