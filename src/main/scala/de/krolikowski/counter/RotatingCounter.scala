@@ -69,6 +69,10 @@ trait RotatingCounter {
    * partition
    */
   def partitions: Seq[Long]
+
+  override def toString =
+    classOf[RotatingCounter].getSimpleName() +
+      "(sum = " + sum + ", partitions = " + partitions + ")"
 }
 
 object RotatingCounter {
