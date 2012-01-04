@@ -35,9 +35,9 @@ class RotatingCounterSpec extends Spec {
     it("should clear all partitions if last event is older than the counter's period") {
       val counter = RotatingCounter((100, 10))
       counter += 1
-      Thread.sleep(90)
+      Thread.sleep(80)
       assert(counter() == 1)
-      Thread.sleep(20)
+      Thread.sleep(30)
       assert(counter() == 0)
     }
 
@@ -47,9 +47,9 @@ class RotatingCounterSpec extends Spec {
       Thread.sleep(20)
       counter += 2
       assert(counter() == 3)
-      Thread.sleep(90)
+      Thread.sleep(80)
       assert(counter() == 2)
-      Thread.sleep(20)
+      Thread.sleep(30)
       assert(counter() == 0)
     }
 
