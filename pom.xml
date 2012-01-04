@@ -6,7 +6,7 @@
 	<version>0.2-SNAPSHOT</version>
 
 	<name>RotatingCounter</name>
-	<url>https://github.com/mkroli/RotatingCounter</url>
+	<url>http://mkroli.github.com/RotatingCounter</url>
 	<description>
 		With RotatingCounter one can count events at the moment they occur.
 		RotatingCounter can then calculate the sum of events over a given period.
