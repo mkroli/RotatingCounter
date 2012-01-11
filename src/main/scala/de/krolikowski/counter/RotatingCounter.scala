@@ -76,6 +76,14 @@ trait RotatingCounter {
 }
 
 object RotatingCounter {
+  private def create(f: (Long, Int) => RotatingCounter, periodDetails: List[(Long, Int)]): RotatingCounter = {
+    periodDetails map {
+      (p: (Long, Int)) => f(p._1, p._2)
+    } reduceLeft {
+      new StackedRotatingCounter(_, _)
+    }
+  }
+
   /**
    * A factory-method to create concrete instances of
    * [[de.krolikowski.counter.RotatingCounter]].
@@ -83,11 +91,9 @@ object RotatingCounter {
    * @return stacked [[de.krolikowski.counter.RotatingCounter]]S one for each
    * tuple in periodDetails
    */
-  def apply(periodDetails: (Long, Int)*): RotatingCounter = {
-    periodDetails map {
-      (p: (Long, Int)) => new SimpleRotatingCounter(p._1, p._2).asInstanceOf[RotatingCounter]
-    } reduceLeft {
-      new StackedRotatingCounter(_, _)
-    }
-  }
+  def apply(periodDetails: (Long, Int)*) =
+    create((p: Long, s: Int) => new SimpleRotatingCounter(p, s), periodDetails.toList)
+
+  def apply(f: (Long, Int) => RotatingCounter, periodDetails: (Long, Int)*) =
+    create(f, periodDetails.toList)
 }
