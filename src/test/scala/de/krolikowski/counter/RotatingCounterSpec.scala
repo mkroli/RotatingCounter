@@ -11,7 +11,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- *limitations under the License.
+ * limitations under the License.
  */
 
 package de.krolikowski.counter
@@ -69,7 +69,7 @@ class RotatingCounterSpec extends Spec {
       assert(counter.partitions == List(0, 0, 0, 0))
     }
 
-    it("should notify on limits reached") {
+    it("should notify on limits being reached") {
       var limitReached = Array(false, false)
       val counter = RotatingCounter((l, s) => new SimpleRotatingCounter(l, s) with Limits {
         limit(10) {
