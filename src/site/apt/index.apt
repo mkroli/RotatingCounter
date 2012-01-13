@@ -25,8 +25,8 @@ About RotatingCounter
 
 +--
 val counter = RotatingCounter(
-  (59 * 60 * 1000, 1000),
-  (60 * 1000, 1000))
+  RotatingCounter(59 * 60 * 1000, 1000),
+  RotatingCounter(60 * 1000, 1000))
 +--
 
   Adding events can be done like the following:
@@ -44,4 +44,19 @@ counter += 5   // adds 5 events
 counter()          // calculates the sum of events occurred during the last period
 counter.sum        // as above
 counter.partitions // returns the partitions containing the events
++--
+
+* Features
+
+** Limits
+
+  If you want a counter over the last minute and do some notification if the
+  counter is above 100 you could do it like this:
+
++--
+val counter = new SimpleRotatingCounter(60000, 100) with Limits {
+  limit(100) {
+    println("Limit of 100 reached!")
+  }
+}
 +--

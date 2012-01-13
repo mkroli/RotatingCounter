@@ -25,7 +25,7 @@ import de.krolikowski.counter.impl.SimpleRotatingCounter
 class RotatingCounterSpec extends Spec {
   describe("A RotatingCounter") {
     it("should calculate the sum of events over a period of time") {
-      val counter = RotatingCounter((1000L, 10))
+      val counter = RotatingCounter(1000L, 10)
       for (i <- 1 to 10) {
         counter += 1
         Thread.sleep(10)
@@ -34,7 +34,7 @@ class RotatingCounterSpec extends Spec {
     }
 
     it("should clear all partitions if last event is older than the counter's period") {
-      val counter = RotatingCounter((100L, 10))
+      val counter = RotatingCounter(100L, 10)
       counter += 1
       Thread.sleep(80)
       assert(counter() == 1)
@@ -43,7 +43,7 @@ class RotatingCounterSpec extends Spec {
     }
 
     it("should clear some partitions if last event is older than period/partitions") {
-      val counter = RotatingCounter((100L, 10))
+      val counter = RotatingCounter(100L, 10)
       counter += 1
       Thread.sleep(20)
       counter += 2
@@ -55,7 +55,9 @@ class RotatingCounterSpec extends Spec {
     }
 
     it("should return the partitions starting from the oldest partition") {
-      val counter = RotatingCounter((80L, 2), (80L, 2))
+      val counter = RotatingCounter(
+        RotatingCounter(80L, 2),
+        RotatingCounter(80L, 2))
       counter.add
 
       assert(counter.partitions == List(0, 0, 0, 1))
@@ -71,14 +73,14 @@ class RotatingCounterSpec extends Spec {
 
     it("should notify on limits being reached") {
       var limitReached = Array(false, false)
-      val counter = RotatingCounter((l, s) => new SimpleRotatingCounter(l, s) with Limits {
+      val counter = new SimpleRotatingCounter(10000L, 100) with Limits {
         limit(10) {
           limitReached(0) = true
         }
         limit(15) {
           limitReached(1) = true
         }
-      }, (10000L, 100))
+      }
 
       for (i <- 1 to 10) {
         assert(!limitReached(0) && !limitReached(1))

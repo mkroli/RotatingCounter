@@ -18,7 +18,13 @@ package de.krolikowski.counter
 
 import de.krolikowski.counter.impl.{ SimpleRotatingCounter, StackedRotatingCounter }
 
-trait RotatingCounter {
+/**
+ * This is the base trait for implementations of RotatingCounter. However each
+ * concrete implementation should implement
+ * [[de.krolikowski.counter.RotatingCounter]] instead as it adds some
+ * shortcuts.
+ */
+trait RotatingCounterBase {
   /**
    * A listener which is called when events expire.
    * The listener doesn't need to be called at the moment the events would
@@ -35,11 +41,6 @@ trait RotatingCounter {
   def add(count: Long): Unit
 
   /**
-   * A shortcut for add(1)
-   */
-  def add: Unit = add(1)
-
-  /**
    * Calculates the current sum of all partitions.
    *
    * @return the number of registered events occurred in the given period of time
@@ -52,6 +53,27 @@ trait RotatingCounter {
   def reset
 
   /**
+   * Gives access to the inside of this
+   * [[de.krolikowski.counter.RotatingCounter]].
+   * @return a sequence of counters which represent the whole period of this
+   * [[de.krolikowski.counter.RotatingCounter]] starting from the oldest
+   * partition
+   */
+  def partitions: Seq[Long]
+}
+
+/**
+ * This trait adds some shortcuts to
+ * [[de.krolikowski.counter.RotatingCounterBase]]. Therefore this trait should
+ * be mixed in each instance of [[de.krolikowski.counter.RotatingCounterBase]].
+ */
+trait RotatingCounter extends RotatingCounterBase {
+  /**
+   * A shortcut for add(1)
+   */
+  final def add: Unit = add(1)
+
+  /**
    * A shortcut for add(count)
    */
   def +=(count: Long) = add(count)
@@ -61,39 +83,28 @@ trait RotatingCounter {
    */
   def apply() = sum
 
-  /**
-   * Gives access to the inside of this
-   * [[de.krolikowski.counter.RotatingCounter]].
-   * @return a sequence of counters which represent the whole period of this
-   * [[de.krolikowski.counter.RotatingCounter]] starting from the oldest
-   * partition
-   */
-  def partitions: Seq[Long]
-
   override def toString =
     classOf[RotatingCounter].getSimpleName() +
       "(sum = " + sum + ", partitions = " + partitions + ")"
 }
 
 object RotatingCounter {
-  private def create(f: (Long, Int) => RotatingCounter, periodDetails: List[(Long, Int)]): RotatingCounter = {
-    periodDetails map {
-      (p: (Long, Int)) => f(p._1, p._2)
-    } reduceLeft {
-      new StackedRotatingCounter(_, _)
-    }
-  }
+  /**
+   * A factory-method to create concrete instances of
+   * [[de.krolikowski.counter.RotatingCounter]].
+   * @param period the period of the counter
+   * @param size the partition size of the counter
+   * @return [[de.krolikowski.counter.impl.SimpleRotatingCounter]]
+   */
+  def apply(period: Long, size: Int) = new SimpleRotatingCounter(period, size)
 
   /**
    * A factory-method to create concrete instances of
    * [[de.krolikowski.counter.RotatingCounter]].
-   * @param periodDetails a list of tuples (duration, partition size)
-   * @return stacked [[de.krolikowski.counter.RotatingCounter]]S one for each
-   * tuple in periodDetails
+   * @param counters a list of [[de.krolikowski.counter.RotatingCounter]]
+   * which should be stacked together
+   * @return [[de.krolikowski.counter.impl.StackedRotatingCounter]]
    */
-  def apply(periodDetails: (Long, Int)*) =
-    create((p: Long, s: Int) => new SimpleRotatingCounter(p, s), periodDetails.toList)
-
-  def apply(f: (Long, Int) => RotatingCounter, periodDetails: (Long, Int)*) =
-    create(f, periodDetails.toList)
+  def apply(counters: RotatingCounter*) =
+    counters reduceLeft { new StackedRotatingCounter(_, _) }
 }

@@ -16,7 +16,21 @@
 
 package de.krolikowski.counter
 
-trait Limits extends RotatingCounter {
+/**
+ * With this trait you can add callback functions to an implementation of
+ * [[de.krolikowski.counter.RotatingCounter]] which are called if some
+ * limit is reached.
+ * For example if you want a counter over the last minute and do some
+ * notification if the counter is above 100 you could do it like this:
+ * <pre>
+ * val counter = new SimpleRotatingCounter(60000, 100) with Limits {
+ *   limit(100) {
+ *     println("Limit of 100 reached!")
+ *   }
+ * }
+ * </pre>
+ */
+trait Limits extends RotatingCounterBase {
   private var limits: List[(Long, () => Unit)] = List()
 
   def limit(limit: Long)(f: => Unit) {
