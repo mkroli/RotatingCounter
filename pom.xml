@@ -20,7 +20,7 @@
 	</licenses>
 	<organization>
 		<name>Michael Krolikowski</name>
-		<url>https://github.com/mkroli</url>
+		<url>http://mkroli.github.com/</url>
 	</organization>
 	<scm>
 		<connection>scm:git:git://github.com/mkroli/RotatingCounter.git</connection>
@@ -96,6 +96,12 @@
 				<groupId>org.scala-tools</groupId>
 				<artifactId>maven-scala-plugin</artifactId>
 				<version>2.15.1</version>
+				<configuration>
+					<args>
+						<arg>-unchecked</arg>
+						<arg>-deprecation</arg>
+					</args>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
