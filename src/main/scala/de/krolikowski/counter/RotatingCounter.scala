@@ -19,12 +19,9 @@ package de.krolikowski.counter
 import de.krolikowski.counter.impl.{ SimpleRotatingCounter, StackedRotatingCounter }
 
 /**
- * This is the base trait for implementations of RotatingCounter. However each
- * concrete implementation should implement
- * [[de.krolikowski.counter.RotatingCounter]] instead as it adds some
- * shortcuts.
+ * This is the base trait for implementations of RotatingCounter.
  */
-trait RotatingCounterBase {
+trait RotatingCounter {
   /**
    * A listener which is called when events expire.
    * The listener doesn't need to be called at the moment the events would
@@ -60,32 +57,6 @@ trait RotatingCounterBase {
    * partition
    */
   def partitions: Seq[Long]
-}
-
-/**
- * This trait adds some shortcuts to
- * [[de.krolikowski.counter.RotatingCounterBase]]. Therefore this trait should
- * be mixed in each instance of [[de.krolikowski.counter.RotatingCounterBase]].
- */
-trait RotatingCounter extends RotatingCounterBase {
-  /**
-   * A shortcut for add(1)
-   */
-  final def add: Unit = add(1)
-
-  /**
-   * A shortcut for add(count)
-   */
-  def +=(count: Long) = add(count)
-
-  /**
-   * A shortcut for sum
-   */
-  def apply() = sum
-
-  override def toString =
-    classOf[RotatingCounter].getSimpleName() +
-      "(sum = " + sum + ", partitions = " + partitions + ")"
 }
 
 object RotatingCounter {

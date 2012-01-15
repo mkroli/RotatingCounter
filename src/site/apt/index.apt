@@ -24,9 +24,9 @@ About RotatingCounter
   one for 59 and one for the last 1 minute looks like the following:
 
 +--
-val counter = RotatingCounter(
-  RotatingCounter(59 * 60 * 1000, 1000),
-  RotatingCounter(60 * 1000, 1000))
+val counter = new StackedRotatingCounter(
+  new SimpleRotatingCounter(59 * 60 * 1000, 1000),
+  new SimpleRotatingCounter(60 * 1000, 1000)) with Shortcuts
 +--
 
   Adding events can be done like the following:
@@ -54,9 +54,8 @@ counter.partitions // returns the partitions containing the events
   counter is above 100 you could do it like this:
 
 +--
-val counter = new SimpleRotatingCounter(60000, 100) with Limits {
-  limit(100) {
-    println("Limit of 100 reached!")
-  }
+val counter = new SimpleRotatingCounter(60000, 100) with Limits
+counter.limit(100) {
+  println("Limit of 100 reached!")
 }
 +--

@@ -23,14 +23,13 @@ package de.krolikowski.counter
  * For example if you want a counter over the last minute and do some
  * notification if the counter is above 100 you could do it like this:
  * <pre>
- * val counter = new SimpleRotatingCounter(60000, 100) with Limits {
- *   limit(100) {
- *     println("Limit of 100 reached!")
- *   }
+ * val counter = new SimpleRotatingCounter(60000, 100) with Limits
+ * counter.limit(100)
+ *   println("Limit of 100 reached!")
  * }
  * </pre>
  */
-trait Limits extends RotatingCounterBase {
+trait Limits extends RotatingCounter {
   private var limits: List[(Long, () => Unit)] = List()
 
   def limit(limit: Long)(f: => Unit) {
