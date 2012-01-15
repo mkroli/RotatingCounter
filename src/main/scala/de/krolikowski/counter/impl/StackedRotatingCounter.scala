@@ -18,9 +18,15 @@ package de.krolikowski.counter.impl
 
 import de.krolikowski.counter.RotatingCounter
 
-class StackedRotatingCounter(pastRotatingCounter: RotatingCounter, currentRotatingCounter: RotatingCounter) extends RotatingCounter {
-  currentRotatingCounter.onExpiry = (count: Long) => pastRotatingCounter add count
+class StackedRotatingCounter(rotatingCounters: RotatingCounter*) extends RotatingCounter {
+  val pastRotatingCounter = rotatingCounters.head
+  val currentRotatingCounter = if (rotatingCounters.length == 2) {
+    rotatingCounters.last
+  } else {
+    new StackedRotatingCounter(rotatingCounters.drop(1): _*)
+  }
   pastRotatingCounter.onExpiry = (count: Long) => this.onExpiry(count)
+  currentRotatingCounter.onExpiry = (count: Long) => pastRotatingCounter add count
 
   override def add(count: Long) = currentRotatingCounter add count
 

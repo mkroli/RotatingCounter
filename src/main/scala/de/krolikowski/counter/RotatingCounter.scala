@@ -58,24 +58,3 @@ trait RotatingCounter {
    */
   def partitions: Seq[Long]
 }
-
-object RotatingCounter {
-  /**
-   * A factory-method to create concrete instances of
-   * [[de.krolikowski.counter.RotatingCounter]].
-   * @param period the period of the counter
-   * @param size the partition size of the counter
-   * @return [[de.krolikowski.counter.impl.SimpleRotatingCounter]]
-   */
-  def apply(period: Long, size: Int) = new SimpleRotatingCounter(period, size)
-
-  /**
-   * A factory-method to create concrete instances of
-   * [[de.krolikowski.counter.RotatingCounter]].
-   * @param counters a list of [[de.krolikowski.counter.RotatingCounter]]
-   * which should be stacked together
-   * @return [[de.krolikowski.counter.impl.StackedRotatingCounter]]
-   */
-  def apply(counters: RotatingCounter*) =
-    counters reduceLeft { new StackedRotatingCounter(_, _) }
-}

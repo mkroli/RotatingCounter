@@ -57,8 +57,9 @@ class RotatingCounterSpec extends Spec {
 
     it("should return the partitions starting from the oldest partition") {
       val counter = new StackedRotatingCounter(
-        RotatingCounter(80L, 2),
-        RotatingCounter(80L, 2)) with Shortcuts
+        new SimpleRotatingCounter(40L, 1),
+        new SimpleRotatingCounter(40L, 1),
+        new SimpleRotatingCounter(80L, 2)) with Shortcuts
       counter.add
 
       assert(counter.partitions == List(0, 0, 0, 1))
