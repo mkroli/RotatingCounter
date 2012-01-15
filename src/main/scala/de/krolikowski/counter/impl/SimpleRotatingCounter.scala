@@ -18,6 +18,11 @@ package de.krolikowski.counter.impl
 
 import de.krolikowski.counter.RotatingCounter
 
+/**
+ * An implementation of [[de.krolikowski.counter.RotatingCounter]].
+ * @param period the period in milliseconds for which events should be counted
+ * @param size the number of partitions in which information will be stored
+ */
 class SimpleRotatingCounter(period: Long, size: Int) extends RotatingCounter {
   private val counterPartitions = new Array[Long](size)
   private var lastAccessTime: Long = _

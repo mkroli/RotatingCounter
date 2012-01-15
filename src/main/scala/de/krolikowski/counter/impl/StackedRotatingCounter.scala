@@ -18,13 +18,30 @@ package de.krolikowski.counter.impl
 
 import de.krolikowski.counter.RotatingCounter
 
-class StackedRotatingCounter(rotatingCounters: RotatingCounter*) extends RotatingCounter {
-  val pastRotatingCounter = rotatingCounters.head
-  val currentRotatingCounter = if (rotatingCounters.length == 2) {
-    rotatingCounters.last
-  } else {
-    new StackedRotatingCounter(rotatingCounters.drop(1): _*)
-  }
+/**
+ * An implementation of [[de.krolikowski.counter.RotatingCounter]] which can
+ * be used to stack other implementations of
+ * [[de.krolikowski.counter.RotatingCounter]] together. You need at least two
+ * other [[de.krolikowski.counter.RotatingCounter]]S but you can have more.
+ * @param rc1 the [[de.krolikowski.counter.RotatingCounter]] which should
+ * store the oldest events
+ * @param rc2 the [[de.krolikowski.counter.RotatingCounter]] which should
+ * store the second oldest events
+ * @param rcN more (if any) [[de.krolikowski.counter.RotatingCounter]]S which
+ * should be sorted by the date of the events they should store (the most
+ * current [[de.krolikowski.counter.RotatingCounter]] should be the last
+ * element)
+ */
+class StackedRotatingCounter(
+  rc1: RotatingCounter,
+  rc2: RotatingCounter,
+  rcN: RotatingCounter*) extends RotatingCounter {
+  val pastRotatingCounter = rc1
+  val currentRotatingCounter =
+    if (rcN.isEmpty)
+      rc2
+    else
+      new StackedRotatingCounter(rc2, rcN.head, rcN.drop(1): _*)
   pastRotatingCounter.onExpiry = (count: Long) => this.onExpiry(count)
   currentRotatingCounter.onExpiry = (count: Long) => pastRotatingCounter add count
 
