@@ -42,12 +42,12 @@ trait RotatingCounter {
    *
    * @return the number of registered events occurred in the given period of time
    */
-  def sum: Long
+  def sum(): Long
 
   /**
    * Resets the complete counter. This means all partitions are set to 0.
    */
-  def reset
+  def reset()
 
   /**
    * Gives access to the inside of this
@@ -56,5 +56,5 @@ trait RotatingCounter {
    * [[de.krolikowski.counter.RotatingCounter]] starting from the oldest
    * partition
    */
-  def partitions: Seq[Long]
+  def partitions(): Seq[Long]
 }

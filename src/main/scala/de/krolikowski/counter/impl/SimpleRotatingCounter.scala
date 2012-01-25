@@ -30,7 +30,8 @@ class SimpleRotatingCounter(period: Long, size: Int) extends RotatingCounter {
 
   private def partitionOfTime(time: Long) = (time * size) / period
 
-  private def rotatedPartitionOfTime(now: Long) = partitionOfTime(now % period).asInstanceOf[Int]
+  private def rotatedPartitionOfTime(now: Long) =
+    partitionOfTime(now % period).asInstanceOf[Int]
 
   @scala.annotation.tailrec
   private def resetRotating(start: Int, end: Int, expired: Long = 0L): Long = {
@@ -66,7 +67,7 @@ class SimpleRotatingCounter(period: Long, size: Int) extends RotatingCounter {
     }
   }
 
-  override def sum: Long = {
+  override def sum(): Long = {
     val now = System.currentTimeMillis
     counterPartitions synchronized {
       expire(now, rotatedPartitionOfTime(now))
@@ -74,9 +75,10 @@ class SimpleRotatingCounter(period: Long, size: Int) extends RotatingCounter {
     }
   }
 
-  override def reset: Unit = counterPartitions synchronized resetRotating(0, size - 1)
+  override def reset(): Unit =
+    counterPartitions synchronized resetRotating(0, size - 1)
 
-  override def partitions = {
+  override def partitions() = {
     val now = System.currentTimeMillis
     val index = rotatedPartitionOfTime(now)
     counterPartitions synchronized {

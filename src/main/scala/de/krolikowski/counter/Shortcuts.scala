@@ -8,7 +8,7 @@ trait Shortcuts extends RotatingCounter {
   /**
    * A shortcut for add(1)
    */
-  final def add: Unit = add(1)
+  final def add(): Unit = add(1)
 
   /**
    * A shortcut for add(count)
@@ -18,7 +18,7 @@ trait Shortcuts extends RotatingCounter {
   /**
    * A shortcut for sum
    */
-  def apply() = sum
+  def apply() = sum()
 
   override def toString =
     classOf[RotatingCounter].getSimpleName() +
