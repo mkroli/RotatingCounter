@@ -32,7 +32,7 @@ val counter = new StackedRotatingCounter(
   Adding events can be done like the following:
 
 +--
-counter.add    // adds 1 event
+counter.add()  // adds 1 event
 counter.add(1) // adds 1 event
 counter += 1   // adds 1 event
 counter += 5   // adds 5 events
@@ -41,9 +41,9 @@ counter += 5   // adds 5 events
   The data can be read like this:
 
 +--
-counter()          // calculates the sum of events occurred during the last period
-counter.sum        // as above
-counter.partitions // returns the partitions containing the events
+counter()            // calculates the sum of events occurred during the last period
+counter.sum()        // as above
+counter.partitions() // returns the partitions containing the events
 +--
 
 * Features
